@@ -1,0 +1,15 @@
+services:
+  db:
+    container_name: postgres-bkool
+    image: postgres
+    environment:
+      POSTGRES_USER: bryan
+      POSTGRES_PASSWORD: root
+      PGDATA: /data/postgres
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+volumes:
+  db:
