@@ -1,14 +1,12 @@
 package me.bryanc.bkoolrestapi.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.springframework.lang.Nullable;
 
 @Entity
-@Table(name = "bikes")
 public class Bike {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
