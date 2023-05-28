@@ -2,6 +2,10 @@ package me.bryanc.bkoolrestapi.model;
 
 import jakarta.persistence.*;
 import org.springframework.lang.Nullable;
+
+import java.util.List;
+import java.util.Set;
+
 @Entity
 public class Item {
     @Id
@@ -9,13 +13,14 @@ public class Item {
     private Long id;
     private String model;
     private String type;
-    @Nullable
+    @Column(nullable = true)
     private String description;
+
 
     public Item() {
     }
 
-    public Item(Long id, String model, String type, @Nullable String description) {
+    public Item(Long id, String model, String type, String description) {
         this.id = id;
         this.model = model;
         this.type = type;
@@ -31,6 +36,8 @@ public class Item {
                 ", description='" + description + '\'' +
                 '}';
     }
+
+
 
     public Long getId() {
         return id;
