@@ -2,6 +2,8 @@ package me.bryanc.bkoolrestapi.service;
 
 import me.bryanc.bkoolrestapi.model.Bike;
 import me.bryanc.bkoolrestapi.repository.BikeRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,13 @@ public class BikeService {
         this.bikeRepository = bikeRepository;
     }
 
+    @Cacheable(value = "bikes")
     public ResponseEntity<List<Bike>> getAll(){
         //if (bikeRepository.count() === 0) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(bikeRepository.findAll());
     }
 
+    @CacheEvict(value = "bikes", allEntries = true)
     public ResponseEntity<Bike> createBike(Bike newBike){
         if("".equals(newBike.getName().trim()) || newBike.getId() != null){
             return ResponseEntity.badRequest().build();
@@ -31,6 +35,7 @@ public class BikeService {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBike);
     }
 
+    @Cacheable(value = "bikes")
     public ResponseEntity<List<Bike>> searchBikes(String bikeName, String bikeManufacturer, String bikeItemType, String sort){
         if (sort.equals("desc")) {
             return ResponseEntity.ok(bikeRepository.searchBikesOrderByNameDesc(bikeName, bikeManufacturer, bikeItemType));

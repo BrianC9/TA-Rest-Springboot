@@ -32,7 +32,7 @@ public interface BikeRepository extends JpaRepository<Bike, Long> {
            left join  "bike_item" "bi" on b.id = "bi".fk_bike
            left join item i on bi.fk_item = i.id
            where b.name ILIKE %:name% and b.manufacturer ILIKE %:manufacturer% and (i.type ilike %:itemType% or i.type is null)
-           ORDER BY b.id desc
+           ORDER BY b.name desc
             """, nativeQuery = true)
     List<Bike> searchBikesOrderByNameDesc(@Param("name") String name, @Param("manufacturer") String manufacturer,@Param("itemType") String itemType);
 }
