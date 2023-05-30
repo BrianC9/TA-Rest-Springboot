@@ -1,13 +1,10 @@
 package me.bryanc.bkoolrestapi.controller;
 
 import me.bryanc.bkoolrestapi.model.Bike;
-import me.bryanc.bkoolrestapi.repository.BikeRepository;
 import me.bryanc.bkoolrestapi.service.BikeService;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,7 +20,7 @@ public class BikeController {
 
     @GetMapping()
     public ResponseEntity<List<Bike>> findAll(){
-        return bikeService.getAll();
+        return ResponseEntity.ok(bikeService.getAll());
     }
 
     /*
@@ -36,7 +33,7 @@ public class BikeController {
      *  */
     @PostMapping()
     public ResponseEntity<Bike> createBike(@RequestBody Bike newBike){
-        return bikeService.createBike(newBike);
+        return ResponseEntity.status(HttpStatus.CREATED).body(bikeService.createBike(newBike));
     }
 
 
@@ -48,7 +45,7 @@ public class BikeController {
                                                @RequestParam(required = false,defaultValue = "desc", name = "sort") String sort){
 
         System.out.printf("Values from RequestParams \n Name: %s, Manufacturer: %s, Item-Type: %s, Sort: %s ",name,manufacturer,itemType,sort);
-        return bikeService.searchBikes(name,manufacturer,itemType,sort);
+        return ResponseEntity.ok(bikeService.searchBikes(name,manufacturer,itemType,sort));
     }
 
 

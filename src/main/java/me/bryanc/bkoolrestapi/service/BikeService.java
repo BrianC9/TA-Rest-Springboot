@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Set;
@@ -21,26 +22,26 @@ public class BikeService {
     }
 
     @Cacheable(value = "bikes")
-    public ResponseEntity<List<Bike>> getAll(){
+    public List<Bike> getAll(){
         //if (bikeRepository.count() === 0) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(bikeRepository.findAll());
+        return bikeRepository.findAll();
     }
 
     @CacheEvict(value = "bikes", allEntries = true)
-    public ResponseEntity<Bike> createBike(Bike newBike){
+    public Bike createBike(Bike newBike){
         if("".equals(newBike.getName().trim()) || newBike.getId() != null){
-            return ResponseEntity.badRequest().build();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         Bike createdBike = bikeRepository.save(newBike);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdBike);
+        return createdBike;
     }
 
     @Cacheable(value = "bikes")
-    public ResponseEntity<List<Bike>> searchBikes(String bikeName, String bikeManufacturer, String bikeItemType, String sort){
+    public List<Bike> searchBikes(String bikeName, String bikeManufacturer, String bikeItemType, String sort){
         if (sort.equals("desc")) {
-            return ResponseEntity.ok(bikeRepository.searchBikesOrderByNameDesc(bikeName, bikeManufacturer, bikeItemType));
+            return bikeRepository.searchBikesOrderByNameDesc(bikeName, bikeManufacturer, bikeItemType);
         }
-        return ResponseEntity.ok(bikeRepository.searchBikesOrderByNameAsc(bikeName,bikeManufacturer,bikeItemType));
+        return bikeRepository.searchBikesOrderByNameAsc(bikeName,bikeManufacturer,bikeItemType);
     }
 
 }

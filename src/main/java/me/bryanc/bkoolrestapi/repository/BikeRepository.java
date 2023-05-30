@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 public interface BikeRepository extends JpaRepository<Bike, Long> {
-    List<Bike> findByNameContainingIgnoreCaseOrderByName(String name);
 
     @Query(value =
     """
